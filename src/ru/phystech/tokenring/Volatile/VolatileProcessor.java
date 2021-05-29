@@ -25,7 +25,6 @@ public class VolatileProcessor extends Processor {
             DataPackage dataPackage = new DataPackage(i + " data");
             nodeList.get(i).receivePackage(dataPackage);
             VolatileNode curNode = (VolatileNode) nodeList.get(i);
-            curNode.state = false;
         }
 
     }

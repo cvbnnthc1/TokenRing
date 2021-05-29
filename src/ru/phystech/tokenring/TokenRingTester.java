@@ -1,9 +1,12 @@
 package ru.phystech.tokenring;
 
-import ru.phystech.tokenring.blockingQueue.ArrayBlockingQueueRingProcessor;
-
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class TokenRingTester {
 
@@ -17,7 +20,8 @@ public abstract class TokenRingTester {
         System.out.println("_______________");
     }
 
-    protected static void testTokenRing(Processor processor, long[][] resLatencies, long[][] resThroughputs) {
+    protected static void testTokenRing(Processor processor, long[][] resLatencies, long[][] resThroughputs,
+                                        int iIndex, int jIndex) {
         List<Double> latencies = new ArrayList<>();
         List<Double> throughputs = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -28,13 +32,21 @@ public abstract class TokenRingTester {
             throughputs.add(processor.getThroughput());
             processor.reload();
         }
-        double avgLatency = latencies.stream().reduce(Double::sum).get() / latencies.size();
-        double avgThroughput = throughputs.stream().reduce(Double::sum).get() / latencies.size();
-        resLatencies[processor.getNodesAmount() - 1][processor.getDataAmount() - 1] = Math.round(avgLatency);
-        resThroughputs[processor.getNodesAmount() - 1][processor.getDataAmount() - 1] = Math.round(avgThroughput);
+        double medianLatency = latencies
+                .stream()
+                .sorted()
+                .collect(Collectors.toList())
+                .get(latencies.size() / 2);
+        double medianThroughput = throughputs
+                .stream()
+                .sorted()
+                .collect(Collectors.toList())
+                .get(throughputs.size() / 2);
+        resLatencies[iIndex][jIndex] = Math.round(medianLatency);
+        resThroughputs[iIndex][jIndex] = Math.round(medianThroughput);
         System.out.println("nodes amount " + processor.getNodesAmount() + " data amount " + processor.getDataAmount());
-        System.out.println("latency " + avgLatency);
-        System.out.println("throughput  " + avgThroughput);
+        System.out.println("latency " + medianLatency);
+        System.out.println("throughput  " + medianThroughput);
         System.out.println("_________________");
     }
 
@@ -42,5 +54,20 @@ public abstract class TokenRingTester {
         processor.startProcessing();
         processor.doSleep(50);
         processor.stop();
+    }
+
+    protected static String convertToCSV(long[] data) {
+        return Arrays.stream(data)
+                .mapToObj(Long::toString)
+                .collect(Collectors.joining(";"));
+    }
+
+    protected static void createCsvFile(long[][] data, String name) throws IOException {
+        File csvOutputFile = new File(name);
+        try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+            Arrays.stream(data)
+                    .map(TokenRingTester::convertToCSV)
+                    .forEach(pw::println);
+        }
     }
 }

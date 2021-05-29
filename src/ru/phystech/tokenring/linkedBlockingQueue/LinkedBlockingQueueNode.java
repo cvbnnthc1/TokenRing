@@ -3,10 +3,10 @@ package ru.phystech.tokenring.linkedBlockingQueue;
 import ru.phystech.tokenring.DataPackage;
 import ru.phystech.tokenring.Node;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class LinkedBlockingQueueNode extends Node {
-    private final Queue<DataPackage> bufferStack = new ArrayBlockingQueue<>(100);
+    private final Queue<DataPackage> bufferStack = new LinkedBlockingQueue<>();
 
     LinkedBlockingQueueNode(int nodeId, LinkedBlockingQueueProcessor processor) {
         super(nodeId, processor);

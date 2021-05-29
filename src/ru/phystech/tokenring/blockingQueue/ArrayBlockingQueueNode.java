@@ -6,10 +6,11 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class ArrayBlockingQueueNode extends Node  {
-    private final Queue<DataPackage> bufferStack = new ArrayBlockingQueue<>(100);
+    private final Queue<DataPackage> bufferStack;
 
-    ArrayBlockingQueueNode(int nodeId, ArrayBlockingQueueRingProcessor processor) {
+    ArrayBlockingQueueNode(int nodeId, ArrayBlockingQueueRingProcessor processor, int dataAmount) {
         super(nodeId, processor);
+        bufferStack = new ArrayBlockingQueue<>(dataAmount);
     }
 
     public void receivePackage(DataPackage dataPackage) {
