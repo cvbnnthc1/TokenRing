@@ -4,9 +4,9 @@ import ru.phystech.tokenring.DataPackage;
 import ru.phystech.tokenring.Processor;
 import java.util.ArrayList;
 
-public class ArrayBlockingQueueRingProcessor extends Processor {
+public class ArrayBlockingQueueProcessor extends Processor {
 
-    ArrayBlockingQueueRingProcessor(int nodesAmount, int dataAmount){
+    ArrayBlockingQueueProcessor(int nodesAmount, int dataAmount){
         super(nodesAmount, dataAmount);
     }
 

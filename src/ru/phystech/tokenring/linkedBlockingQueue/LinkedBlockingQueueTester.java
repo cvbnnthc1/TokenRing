@@ -1,7 +1,6 @@
 package ru.phystech.tokenring.linkedBlockingQueue;
 
 import ru.phystech.tokenring.TokenRingTester;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -11,10 +10,11 @@ public class LinkedBlockingQueueTester extends TokenRingTester {
         warmup(new LinkedBlockingQueueProcessor(5, 5));
         generalDependency();
         dataAmountDependency();
+        nodeAmountDependency();
     }
 
     private static void generalDependency() throws IOException {
-        List<Integer> nodeAmounts = List.of(2, 4, 6, 8);
+        List<Integer> nodeAmounts = List.of(2, 4, 6, 8, 10);
         List<Integer> dataAmounts = List.of(1, 2, 4, 8, 16, 32);
         long[][] resLatencies = new long[nodeAmounts.size()][dataAmounts.size()];
         long[][] resThroughputs = new long[nodeAmounts.size()][dataAmounts.size()];
@@ -41,6 +41,18 @@ public class LinkedBlockingQueueTester extends TokenRingTester {
         }
         createCsvFile(resLatencies, "LinkedBlockingQueueLatenciesDataAmountDependency.csv");
         createCsvFile(resThroughputs, "LinkedBlockingQueueThroughputsDataAmountDependency.csv");
+    }
+
+    static void nodeAmountDependency() throws IOException {
+        List<Integer> nodeAmounts = List.of(2, 4, 8, 16, 32, 64, 128, 256, 512);
+        double[][] resLatencies = new double[1][nodeAmounts.size()];
+        double[][] resThroughputs = new double[1][nodeAmounts.size()];
+        for (int j = 0; j < nodeAmounts.size(); j++) {
+            testTokenRing(new LinkedBlockingQueueProcessor(nodeAmounts.get(j), nodeAmounts.get(j) - 1),
+                    resLatencies, resThroughputs, 0, j);
+        }
+        createCsvFile(resLatencies, "LinkedBlockingQueueLatenciesNodeAmountDependency.csv");
+        createCsvFile(resThroughputs, "LinkedBlockingQueueThroughputsNodeAmountDependency.csv");
     }
 }
 

@@ -1,7 +1,5 @@
 package ru.phystech.tokenring;
 
-import ru.phystech.tokenring.blockingQueue.ArrayBlockingQueueRingProcessor;
-
 import java.util.ArrayList;
 import java.util.List;
 

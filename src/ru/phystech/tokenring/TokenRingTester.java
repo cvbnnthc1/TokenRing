@@ -24,9 +24,9 @@ public abstract class TokenRingTester {
                                         int iIndex, int jIndex) {
         List<Double> latencies = new ArrayList<>();
         List<Double> throughputs = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             processor.startProcessing();
-            processor.doSleep(300);
+            processor.doSleep(5000);
             processor.stop();
             latencies.add(processor.getLatency());
             throughputs.add(processor.getThroughput());
@@ -50,6 +50,36 @@ public abstract class TokenRingTester {
         System.out.println("_________________");
     }
 
+    protected static void testTokenRing(Processor processor, double[][] resLatencies, double[][] resThroughputs,
+                                        int iIndex, int jIndex) {
+        List<Double> latencies = new ArrayList<>();
+        List<Double> throughputs = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            processor.startProcessing();
+            processor.doSleep(5000);
+            processor.stop();
+            latencies.add(processor.getLatency());
+            throughputs.add(processor.getThroughput());
+            processor.reload();
+        }
+        double medianLatency = latencies
+                .stream()
+                .sorted()
+                .collect(Collectors.toList())
+                .get(latencies.size() / 2);
+        double medianThroughput = throughputs
+                .stream()
+                .sorted()
+                .collect(Collectors.toList())
+                .get(throughputs.size() / 2);
+        resLatencies[iIndex][jIndex] = medianLatency;
+        resThroughputs[iIndex][jIndex] = medianThroughput;
+        System.out.println("nodes amount " + processor.getNodesAmount() + " data amount " + processor.getDataAmount());
+        System.out.println("latency " + medianLatency);
+        System.out.println("throughput  " + medianThroughput);
+        System.out.println("_________________");
+    }
+
     protected static void warmup(Processor processor) {
         processor.startProcessing();
         processor.doSleep(50);
@@ -62,7 +92,22 @@ public abstract class TokenRingTester {
                 .collect(Collectors.joining(";"));
     }
 
+    protected static String convertToCSV(double[] data) {
+        return Arrays.stream(data)
+                .mapToObj(Double::toString)
+                .collect(Collectors.joining(";"));
+    }
+
     protected static void createCsvFile(long[][] data, String name) throws IOException {
+        File csvOutputFile = new File(name);
+        try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
+            Arrays.stream(data)
+                    .map(TokenRingTester::convertToCSV)
+                    .forEach(pw::println);
+        }
+    }
+
+    protected static void createCsvFile(double[][] data, String name) throws IOException {
         File csvOutputFile = new File(name);
         try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
             Arrays.stream(data)

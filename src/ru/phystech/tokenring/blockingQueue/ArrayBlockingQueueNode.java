@@ -8,7 +8,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class ArrayBlockingQueueNode extends Node  {
     private final Queue<DataPackage> bufferStack;
 
-    ArrayBlockingQueueNode(int nodeId, ArrayBlockingQueueRingProcessor processor, int dataAmount) {
+    ArrayBlockingQueueNode(int nodeId, ArrayBlockingQueueProcessor processor, int dataAmount) {
         super(nodeId, processor);
         bufferStack = new ArrayBlockingQueue<>(dataAmount);
     }
