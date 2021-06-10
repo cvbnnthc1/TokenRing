@@ -2,6 +2,7 @@ package ru.phystech.tokenring;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 
 public abstract class Node extends Thread {
     protected int nodeId;
@@ -11,12 +12,14 @@ public abstract class Node extends Thread {
     protected int counter;
     protected long workTime;
     protected List<Long> latencies;
+    protected List<Long> times;
 
     public Node(int nodeId, Processor processor) {
         this.nodeId = nodeId;
         this.processor = processor;
         this.turnOn = true;
         this.latencies = new ArrayList<>();
+        this.times = new ArrayList<>();
     }
 
     abstract public void receivePackage(DataPackage dataPackage);
@@ -34,14 +37,26 @@ public abstract class Node extends Thread {
         turnOn = false;
     }
 
-    public double getAvgLatency() {
+    protected void addTime(String data) {
+        if (data.equals("0")) times.add(System.nanoTime());
+    }
+
+    protected void calculateLatencies() {
+        for (int i = 1; i < times.size(); i++) {
+            latencies.add(times.get(i) - times.get(i - 1));
+        }
+    }
+
+    public double getAvgLatency(int nodeAmount) {
         if (turnOn) throw new IllegalStateException("Node must be off");
+        List<Double> dividedLatencies = new ArrayList<>();
         if (latencies.size() > 0) {
-            double result = 0d;
-            for (int i = 0; i < latencies.size(); i++) {
-                result += latencies.get(i) / (double) latencies.size();
+            for (Long latency : latencies) {
+                dividedLatencies.add(latency / (double) nodeAmount);
             }
-            return result;
+            OptionalDouble result = dividedLatencies.stream().mapToDouble(x -> x).average();
+            if (result.isPresent()) return Math.round(result.getAsDouble());
+            else return 0;
         } else {
             return 0;
         }

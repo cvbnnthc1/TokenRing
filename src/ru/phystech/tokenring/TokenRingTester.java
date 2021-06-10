@@ -24,7 +24,7 @@ public abstract class TokenRingTester {
                                         int iIndex, int jIndex) {
         List<Double> latencies = new ArrayList<>();
         List<Double> throughputs = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) {
             processor.startProcessing();
             processor.doSleep(5000);
             processor.stop();
@@ -82,7 +82,7 @@ public abstract class TokenRingTester {
 
     protected static void warmup(Processor processor) {
         processor.startProcessing();
-        processor.doSleep(50);
+        processor.doSleep(5000);
         processor.stop();
     }
 

@@ -13,8 +13,8 @@ public class VolatileTester extends TokenRingTester {
     }
 
     private static void generalDependency() throws IOException {
-        List<Integer> nodeAmounts = List.of(2, 4, 6, 8, 10);
-        List<Integer> dataAmounts = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        List<Integer> nodeAmounts = List.of(2, 4, 6, 8, 10, 16, 32, 64);
+        List<Integer> dataAmounts = List.of(1, 3, 5, 7, 9, 15, 31, 63);
         long[][] resLatencies = new long[nodeAmounts.size()][dataAmounts.size()];
         long[][] resThroughputs = new long[nodeAmounts.size()][dataAmounts.size()];
         for (int i = 0; i < nodeAmounts.size(); i++) {

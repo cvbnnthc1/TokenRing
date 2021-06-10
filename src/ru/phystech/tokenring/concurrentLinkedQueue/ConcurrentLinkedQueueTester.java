@@ -15,8 +15,8 @@ public class ConcurrentLinkedQueueTester extends TokenRingTester {
     }
 
     private static void generalDepedency() throws IOException {
-        List<Integer> nodeAmounts = List.of(2, 4, 6, 8, 10);
-        List<Integer> dataAmounts = List.of(1, 2, 4, 8, 16, 32);
+        List<Integer> nodeAmounts = List.of(2, 4, 6, 8, 10, 16, 32, 64);
+        List<Integer> dataAmounts = List.of(1, 2, 4, 8, 16, 32, 64, 128);
         long[][] resLatencies = new long[nodeAmounts.size()][dataAmounts.size()];
         long[][] resThroughputs = new long[nodeAmounts.size()][dataAmounts.size()];
         for (int i = 0; i < nodeAmounts.size(); i++) {

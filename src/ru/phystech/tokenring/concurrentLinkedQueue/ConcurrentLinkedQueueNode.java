@@ -13,7 +13,6 @@ public class ConcurrentLinkedQueueNode extends Node {
 
     @Override
     public void receivePackage(DataPackage dataPackage) {
-        dataPackage.time = System.nanoTime();
         bufferStack.add(dataPackage);
     }
 
@@ -23,7 +22,7 @@ public class ConcurrentLinkedQueueNode extends Node {
         while (turnOn) {
             if (!bufferStack.isEmpty()) {
                 DataPackage curPackage = bufferStack.poll();
-                latencies.add(System.nanoTime() - curPackage.time);
+                addTime(curPackage.getData());
                 next.receivePackage(curPackage);
                 counter++;
             }

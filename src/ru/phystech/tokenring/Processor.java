@@ -29,10 +29,13 @@ public abstract class Processor {
         double result = 0d;
         long sizes = 0L;
         for (Node node: nodeList) {
+            node.calculateLatencies();
             sizes += node.getLatencies().size();
         }
         for (Node node: nodeList) {
-            result += node.getAvgLatency() / sizes * node.getLatencies().size();
+            if (sizes > 0) {
+                result += node.getAvgLatency(nodesAmount) / sizes * node.getLatencies().size();
+            }
         }
         return result;
     }
@@ -44,7 +47,9 @@ public abstract class Processor {
             sizes += node.getLatencies().size();
         }
         for (Node node: nodeList) {
-            result += node.getAvgThroughput() / sizes * node.getLatencies().size();
+            if (sizes > 0) {
+                result += node.getAvgThroughput() / sizes * node.getLatencies().size();
+            }
         }
         return result;
     }

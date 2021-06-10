@@ -14,7 +14,6 @@ public class LinkedBlockingQueueNode extends Node {
 
     @Override
     public void receivePackage(DataPackage dataPackage) {
-        dataPackage.time = System.nanoTime();
         bufferStack.add(dataPackage);
     }
 
@@ -24,7 +23,7 @@ public class LinkedBlockingQueueNode extends Node {
         while (turnOn) {
             if (!bufferStack.isEmpty()) {
                 DataPackage curPackage = bufferStack.remove();
-                latencies.add(System.nanoTime() - curPackage.time);
+                addTime(curPackage.getData());
                 next.receivePackage(curPackage);
                 counter++;
             }

@@ -22,7 +22,7 @@ public class ArrayBlockingQueueProcessor extends Processor {
         nodeList.get(nodesAmount - 1).setNext(nodeList.get(0));
 
         for (int i = 0; i < dataAmount; i++) {
-            DataPackage dataPackage = new DataPackage(i + " data");
+            DataPackage dataPackage = new DataPackage(i + "");
             nodeList.get(0).receivePackage(dataPackage);
         }
 

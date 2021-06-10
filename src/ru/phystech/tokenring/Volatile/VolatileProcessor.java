@@ -22,9 +22,9 @@ public class VolatileProcessor extends Processor {
         nodeList.get(nodesAmount - 1).setNext(nodeList.get(0));
 
         for (int i = 0; i < dataAmount; i++) {
-            DataPackage dataPackage = new DataPackage(i + " data");
+            DataPackage dataPackage = new DataPackage(i + "");
             nodeList.get(i).receivePackage(dataPackage);
-            VolatileNode curNode = (VolatileNode) nodeList.get(i);
+           // VolatileNode curNode = (VolatileNode) nodeList.get(i);
         }
 
     }
